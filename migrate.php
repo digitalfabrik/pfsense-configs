@@ -1,12 +1,18 @@
 <?php
 
-// see https://github.com/ironbits/pfsense-tools/blob/master/pfPorts/voucher/files/voucher.c
+// see https://github.com/pfsense/FreeBSD-ports/blob/1301159156a8e3723307adf84c3941b0703b56e7/sysutils/voucher/files/voucher.c
 // https://github.com/ndejong/pfsense_fauxapi/tree/master/pfSense-pkg-FauxAPI/files/usr/local/pkg
 $cryptcode = 0;
-const voucher = "";
-const charset = "2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+const voucher = "gTQiaoZfmh4";
+const charset = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $base = strlen(charset);
-$key = "";
+$public_key = "-----BEGIN PUBLIC KEY-----
+MCQwDQYJKoZIhvcNAQEBBQADEwAwEAIJALvGa/aL7wjvAgMBAAE=
+-----END PUBLIC KEY-----";
+$private_key = "-----BEGIN RSA PRIVATE KEY-----
+MD8CAQACCQC7xmv2i+8I7wIDAQABAgkAtSaalatpCpECBQDix33ZAgUA0/hYBwIE
+Uo2OWQIEcwRZdwIFAMw/Gi8=
+-----END RSA PRIVATE KEY-----";
 
 const roll_bits = 16;
 const ticket_bits = 10;
@@ -32,35 +38,43 @@ function buf2ll($buf, $len)
 }
 
 $strlen = strlen(voucher);
-for ($i = 0; $i < $strlen; $i++) {
+for ($i = $strlen - 1; $i >= 0; $i--) {
     $char = substr(voucher, $i, 1);
-
 
     if (' ' == $char) {
         break;
     }
 
-    $cryptcode *= $base;
+    $cryptcode = (int)($cryptcode * $base);
+    if ($cryptcode > 0xFFFFFFFFFFFFFFFF - 1) {
+        $cryptcode = $cryptcode - (0xFFFFFFFFFFFFFFFF - 1);
+    }
+
     $index = strpos(charset, $char);
-    if (-1 == $index) {
+    if (FALSE == $index) {
         echo("illegal character (%c) found in %s\n" . $char . voucher);
         break;
     }
-    $cryptcode += $index;
-}
+    $cryptcode = (int)($cryptcode + $index);
+    if ($cryptcode > 0xFFFFFFFFFFFFFFFF - 1) {
+        $cryptcode = $cryptcode - 0xFFFFFFFFFFFFFFFF - 1;
+    }
 
+
+}
 echo($cryptcode);
 
 $cryptbuf = "";
 $clearbuf = "";
 
-$crypt_len = 64;
+$crypt_len = 8;
 /* move cryptcode into cryptbuf in network order */
 ll2buf($cryptcode, $cryptbuf, $crypt_len);
-
-
-$num = openssl_public_decrypt($cryptbuf, $clearbuf, $key, OPENSSL_NO_PADDING);
+echo($crypt_len);
 echo($cryptbuf);
+
+$num = openssl_public_decrypt($cryptbuf, $clearbuf, $public_key, OPENSSL_NO_PADDING);
+
 echo($clearbuf);
 return;
 if ($num < 0) {

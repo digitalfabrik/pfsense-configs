@@ -24,7 +24,7 @@ do-extract:
 	mkdir -p ${WRKSRC}
 
 do-build:
-	${CC} ${CFLAGS} -o ${WRKSRC}/${PORTNAME} -lcrypto -lssl ${FILESDIR}/${PORTNAME}.c
+	${CC} ${CFLAGS} -DDEBUG=true -o ${WRKSRC}/${PORTNAME} -lcrypto -lssl ${FILESDIR}/${PORTNAME}.c
 
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/${PORTNAME} ${PREFIX}/${WHERE}/

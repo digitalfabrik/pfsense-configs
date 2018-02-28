@@ -123,6 +123,9 @@
 #include <sys/types.h>
 #include <openssl/pem.h>
 #include <openssl/rsa.h>
+
+#define DEBUG
+
 #ifdef DEBUG
 #include <openssl/err.h>
 #endif
@@ -501,6 +504,10 @@ int main(int argc, char *argv[]) {
                     exit(1);
                 }
                 cryptcode += q-charset;
+                #ifdef DEBUG
+                            if (debug)
+                                fprintf(stderr, "%lu\n", cryptcode);
+                #endif
             }
 
             /* move cryptcode into cryptbuf in network order */
