@@ -2,10 +2,9 @@
 
 // see https://github.com/pfsense/FreeBSD-ports/blob/1301159156a8e3723307adf84c3941b0703b56e7/sysutils/voucher/files/voucher.c
 // https://github.com/ndejong/pfsense_fauxapi/tree/master/pfSense-pkg-FauxAPI/files/usr/local/pkg
-$cryptcode = 0;
-const voucher = "gTQiaoZfmh4";
-const charset = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-$base = strlen(charset);
+
+
+$charset = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $public_key = "-----BEGIN PUBLIC KEY-----
 MCQwDQYJKoZIhvcNAQEBBQADEwAwEAIJALvGa/aL7wjvAgMBAAE=
 -----END PUBLIC KEY-----";
@@ -17,13 +16,17 @@ Uo2OWQIEcwRZdwIFAMw/Gi8=
 const roll_bits = 16;
 const ticket_bits = 10;
 const checksum_bits = 5;
+const code_bytes = 8;
 
-function ll2buf($ll, &$buf, $len)
+function ll2buf($code, $length)
 {
-    for ($i = $len - 1; $i >= 0; $i--) {
-        $buf[$i] = $ll & 0xff;
-        $ll >>= 8;
+    $buf = array();
+
+    for ($i = $length - 1; $i >= 0; $i--) {
+        $buf[$i] = $code & 0xff;
+        $code >>= 8;
     }
+    return $buf;
 }
 
 function buf2ll($buf, $len)
@@ -37,53 +40,43 @@ function buf2ll($buf, $len)
     return $ll;
 }
 
-$strlen = strlen(voucher);
-for ($i = $strlen - 1; $i >= 0; $i--) {
-    $char = substr(voucher, $i, 1);
+$base = strlen($charset);
+$voucher = "gTQiaoZfmh4";
+$voucher_length = strlen($voucher);
 
-    if (' ' == $char) {
-        break;
+$encrypted_code = 0;
+for ($i = $voucher_length - 1; $i >= 0; $i--) {
+    $char = substr($voucher, $i, 1);
+
+    $encrypted_code = $encrypted_code * $base;
+
+    $index = strpos($charset, $char);
+    if ($index === FALSE) {
+        printf("illegal character (%s) found in %s\n", $char, $voucher);
+        return;
     }
 
-    $cryptcode = (int)($cryptcode * $base);
-
-    $index = strpos(charset, $char);
-    if (FALSE == $index) {
-        echo("illegal character (%c) found in %s\n" . $char . voucher);
-        break;
-    }
-    $cryptcode = (int)($cryptcode + $index);
+    $encrypted_code = $encrypted_code + $index;
 }
 
-$cryptbuf = array();
-$clearbuf = "";
+$encrypted_buffer = ll2buf($encrypted_code, code_bytes);
+ksort($encrypted_buffer); // Sort so pack uses the correct order
+$encrypted_buffer = pack("C*", ...$encrypted_buffer); // from sorted array to binary string
 
-$crypt_len = 8;
-/* move cryptcode into cryptbuf in network order */
-ll2buf($cryptcode, $cryptbuf, $crypt_len);
-ksort($cryptbuf);
-$cryptbuf = pack("c*", ...$cryptbuf);
+$decrypted_buffer = "";
+$decrypt_result = openssl_public_decrypt($encrypted_buffer, $decrypted_buffer, $public_key, OPENSSL_NO_PADDING);
 
-// printf("ll2buf len=%d %.16llx -> ", $crypt_len, $cryptcode);
-
-$num = openssl_public_decrypt($cryptbuf, $clearbuf, $public_key, OPENSSL_NO_PADDING);
-
-var_dump($clearbuf);
-$clearbuf = unpack("C*", $clearbuf); // from binary string to associative array
-var_dump($clearbuf);
-$clearcode = buf2ll($clearbuf, $crypt_len);
-
-
-if ($num < 0) {
-    echo("Invalid code <%s>" . voucher);
-    exit(1);
+if ($decrypt_result < 0) {
+    printf("Invalid code <%s>\n", $voucher);
 } else {
-    /* move clearbuf into clearcode in network order */
+    $decrypted_buffer = unpack("C*", $decrypted_buffer); // from binary string to associative array
+
+    $decrypted_code = buf2ll($decrypted_buffer, code_bytes);
 
     /* extract info's out of decrypted code */
-    $rollid = $clearcode & ((1 << roll_bits) - 1);
-    $ticketid = ($clearcode >> roll_bits) & ((1 << ticket_bits) - 1);
-    $checksum = $clearcode >> (ticket_bits + roll_bits);
+    $rollid = $decrypted_code & ((1 << roll_bits) - 1);
+    $ticketid = ($decrypted_code >> roll_bits) & ((1 << ticket_bits) - 1);
+    $checksum = $decrypted_code >> (ticket_bits + roll_bits);
     $checksum &= (1 << checksum_bits) - 1; // get rid of garbage
     var_dump($rollid);
     var_dump($ticketid);
