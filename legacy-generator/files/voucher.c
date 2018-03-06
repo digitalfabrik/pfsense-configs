@@ -231,7 +231,7 @@ static void buf2ll(unsigned char *buf,u_int64_t *ll, int len)
     {
         fprintf(stderr, "buf2ll len=%d ",len);
         for (i=0;i<len;i++)
-            fprintf(stderr, "%.2x ", buf[i]);
+            fprintf(stderr, "%d ", buf[i]);
         fprintf(stderr, "-> %.16llx\n", *ll);
     }
 #endif
@@ -513,6 +513,8 @@ int main(int argc, char *argv[]) {
             /* move cryptcode into cryptbuf in network order */
             ll2buf(cryptcode, cryptbuf, crypt_len);
 
+            printf("\n%.8s\n", cryptbuf);
+
             num = RSA_public_decrypt(crypt_len,
                     cryptbuf, clearbuf, key, RSA_NO_PADDING);
 
@@ -525,6 +527,8 @@ int main(int argc, char *argv[]) {
             {
                 /* move clearbuf into clearcode in network order */
                 buf2ll(clearbuf, &clearcode, crypt_len);
+
+                fprintf(stderr, "Clearcode: %lu\n", clearcode);
 
                 /* extract info's out of decrypted code */
                 rollid = clearcode & ((1<< roll_bits)-1);
