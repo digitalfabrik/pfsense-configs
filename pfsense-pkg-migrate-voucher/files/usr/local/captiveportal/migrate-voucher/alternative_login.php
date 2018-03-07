@@ -24,5 +24,5 @@ http_response_code(200);
     <!--Captiveportal needs this input and javascript does not submit if type=submit-->
     <input name="accept" type="hidden">
 
-    <input name="submit" type="submit" value="Klicken Sie hier, falls Sie nicht automatisch weitergeleitet werden!">
+    <input name="doYourThing" type="submit" value="Klicken Sie hier, falls Sie nicht automatisch weitergeleitet werden!">
 </form>
