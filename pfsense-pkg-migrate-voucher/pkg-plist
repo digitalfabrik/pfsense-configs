@@ -3,9 +3,7 @@
 
 @dir /usr/local/www/migrate-voucher
 /usr/local/www/migrate-voucher/migrate.php
-
-@dir /usr/local/www/migrate-voucher/admin
-/usr/local/www/migrate-voucher/admin/settings.php
+/usr/local/www/migrate-voucher/alternative_login.php
 
 @dir /etc/inc/voucher_migrate
 /etc/inc/voucher_migrate/voucher_migrate.inc
