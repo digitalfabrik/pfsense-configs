@@ -31,6 +31,7 @@ $v = $_POST["voucher"];
 
 
 
+var_dump($g);
 var_dump($v);
 
 $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$from_cpzone}.cfg -k {$g['varetc_path']}/voucher_{$from_cpzone}.public -- $v");
