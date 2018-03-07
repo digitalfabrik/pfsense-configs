@@ -11,7 +11,6 @@ function decrypt_voucher($voucher, $zone)
     $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$zone}.cfg -k {$g['varetc_path']}/voucher_{$zone}.public -- $voucher");
     list($status, $roll, $nr) = explode(" ", $result);
     if ($status != "OK") {
-        printf(gettext('%1$s invalid: %2$s !!'), $voucher, $result);
         return NULL;
     }
 
