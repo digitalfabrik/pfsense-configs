@@ -13,13 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     die();
 }
 
-if (!isset($_POST['voucher'])) {
+if (!isset($_POST['auth_voucher'])) {
     echo('Invalid voucher in POST!');
     http_response_code(500);
     die();
 }
 
-$voucher = $_POST["voucher"];
+$voucher = $_POST["auth_voucher"];
 $result = decrypt_voucher($voucher, FROM_CPZONE);
 
 if (!$result) {
@@ -39,10 +39,8 @@ if (!$target_voucher) {
 $new_POST = $_POST;
 $new_POST['auth_voucher'] = $target_voucher;
 
-session_start();
-
 $_SESSION['voucher_migrate_post'] = $new_POST;
 
 header("HTTP/1.1 301 Moved Permanently");
-header("Location: /migrate-voucher/alternative_login.php");
+header("Location: /migrate-voucher/alternative_login.php?" . http_build_query($new_POST));
 die();
