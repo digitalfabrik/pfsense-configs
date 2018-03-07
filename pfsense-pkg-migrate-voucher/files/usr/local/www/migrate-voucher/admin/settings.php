@@ -1,6 +1,6 @@
 <?php
-#include_once('util.inc');
-#include_once('guiconfig.inc');
+include_once('util.inc');
+include_once('guiconfig.inc');
 #
 #$fauxapi_credentials_ini_file = '/etc/fauxapi/credentials.ini';
 #
