@@ -1,17 +1,17 @@
 # $FreeBSD$
 
-PORTNAME=	pfSense-pkg-FauxAPI
-PORTVERSION=	1.2
-PORTREVISION=	2
+PORTNAME=	pfSense-pkg-migrate-voucher
+PORTVERSION=	0.1
+PORTREVISION=	1
 CATEGORIES=	sysutils
 MASTER_SITES=	# empty
 DISTFILES=	# empty
 EXTRACT_ONLY=	# empty
 
-MAINTAINER=	contact@nicholasdejong.com
-COMMENT=	pfSense package FauxAPI
+MAINTAINER=	ammann@integreat-app.de
+COMMENT=	pfSense package migrate-voucher
 
-LICENSE=	APACHE20
+LICENSE=	MIT
 
 NO_BUILD=	yes
 NO_MTREE=	yes
@@ -24,43 +24,41 @@ do-extract:
 
 do-install:
 	${MKDIR} ${STAGEDIR}${PREFIX}/pkg
-	${INSTALL_DATA} -m 0644 ${FILESDIR}${PREFIX}/pkg/fauxapi.xml \
+	${INSTALL_DATA} -m 0644 ${FILESDIR}${PREFIX}/pkg/migrate-voucher.xml \
 		${STAGEDIR}${PREFIX}/pkg
 
-	${MKDIR} ${STAGEDIR}/etc/inc/priv
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/priv/fauxapi.priv.inc \
-		${STAGEDIR}/etc/inc/priv
+#	${MKDIR} ${STAGEDIR}/etc/inc/priv
+#	${INSTALL_DATA} ${FILESDIR}/etc/inc/priv/fauxapi.priv.inc \
+#		${STAGEDIR}/etc/inc/priv
+#
+#	${MKDIR} ${STAGEDIR}/etc/fauxapi
+#	${INSTALL_DATA} -m 0600 ${FILESDIR}/etc/fauxapi/credentials.ini \
+#		${STAGEDIR}/etc/fauxapi
+#	${INSTALL_DATA} -m 0644 ${FILESDIR}/etc/fauxapi/pfsense_function_calls.txt \
+#		${STAGEDIR}/etc/fauxapi
 
-	${MKDIR} ${STAGEDIR}/etc/fauxapi
-	${INSTALL_DATA} -m 0600 ${FILESDIR}/etc/fauxapi/credentials.ini \
-		${STAGEDIR}/etc/fauxapi
-	${INSTALL_DATA} -m 0644 ${FILESDIR}/etc/fauxapi/pfsense_function_calls.txt \
-		${STAGEDIR}/etc/fauxapi
+	${MKDIR} ${STAGEDIR}${PREFIX}/www/migrate-voucher
+	${MKDIR} ${STAGEDIR}${PREFIX}/www/migrate-voucher/
+	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/migrate-voucher/migrate.php \
+		${STAGEDIR}${PREFIX}/www/migrate-voucher/
 
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi/v1
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/index.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/v1
+	${MKDIR} ${STAGEDIR}${PREFIX}/www/migrate-voucher/admin
+	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/migrate-voucher/admin/settings.php \
+		${STAGEDIR}${PREFIX}/www/migrate-voucher/admin
 
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi/admin
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/about.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/admin
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/credentials.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/admin
-
-	${MKDIR} ${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_actions.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_auth.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_logger.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_pfsense_interface.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_utils.inc \
-		${STAGEDIR}/etc/inc/fauxapi
+#	${MKDIR} ${STAGEDIR}/etc/inc/fauxapi
+#	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi.inc \
+#		${STAGEDIR}/etc/inc/fauxapi
+#	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_actions.inc \
+#		${STAGEDIR}/etc/inc/fauxapi
+#	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_auth.inc \
+#		${STAGEDIR}/etc/inc/fauxapi
+#	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_logger.inc \
+#		${STAGEDIR}/etc/inc/fauxapi
+#	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_pfsense_interface.inc \
+#		${STAGEDIR}/etc/inc/fauxapi
+#	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_utils.inc \
+#		${STAGEDIR}/etc/inc/fauxapi
 
 	${MKDIR} ${STAGEDIR}${DATADIR}
 	${INSTALL_DATA} ${FILESDIR}${DATADIR}/info.xml \
