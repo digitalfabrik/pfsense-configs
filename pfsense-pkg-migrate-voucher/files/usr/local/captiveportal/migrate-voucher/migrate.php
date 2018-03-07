@@ -4,7 +4,12 @@ namespace voucher_migrate;
 include_once('/etc/inc/voucher_migrate/voucher_migrate.inc');
 
 const FROM_CPZONE = 'main';
-const TO_CPZONE = 'target';
+const TO_CPZONE = 'ottostrasse';
+
+function redirect($data) {
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: /migrate-voucher/alternative_login.php?" . http_build_query($data));
+}
 
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
@@ -21,6 +26,12 @@ if (!isset($_POST['auth_voucher'])) {
 
 $voucher = $_POST["auth_voucher"];
 $result = decrypt_voucher($voucher, FROM_CPZONE);
+
+if (!$result) {
+    // Fallback to default decryption
+    redirect($_POST);
+    die();
+}
 
 if (!$result) {
     echo('Could not decrypt voucher!');
@@ -41,6 +52,5 @@ $new_POST['auth_voucher'] = $target_voucher;
 
 $_SESSION['voucher_migrate_post'] = $new_POST;
 
-header("HTTP/1.1 301 Moved Permanently");
-header("Location: /migrate-voucher/alternative_login.php?" . http_build_query($new_POST));
+redirect($new_POST);
 die();
