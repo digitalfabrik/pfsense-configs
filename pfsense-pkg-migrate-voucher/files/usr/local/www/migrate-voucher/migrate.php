@@ -33,10 +33,7 @@ function decrypt_voucher($voucher, $zone)
 
     $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$zone}.cfg -k {$g['varetc_path']}/voucher_{$zone}.public -- $voucher");
     list($status, $roll, $nr) = explode(" ", $result);
-    if ($status == "OK") {
-        var_dump($roll);
-        var_dump($nr);
-    } else {
+    if ($status != "OK") {
         printf(gettext('%1$s invalid: %2$s !!'), $voucher, $result);
         return NULL;
     }
@@ -68,16 +65,23 @@ function generate_voucher($nr, $roll, $zone)
     return substr($result, 2, strlen($result - 3));
 }
 
-$voucher = $_POST["voucher"];
-
-if (!$result) {
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+    echo('Invalid request method!');
     http_response_code(500);
     die();
 }
 
+if (!isset($_POST['voucher'])) {
+    echo('Invalid voucher in POST!');
+    http_response_code(500);
+    die();
+}
+
+$voucher = $_POST["voucher"];
 $result = decrypt_voucher($voucher, FROM_CPZONE);
 
 if (!$result) {
+    echo('Could not decrypt voucher!');
     http_response_code(500);
     die();
 }
@@ -85,6 +89,7 @@ if (!$result) {
 $target_voucher = generate_voucher($result['nr'], $result['roll'], TO_CPZONE);
 
 if (!$target_voucher) {
+    echo('Could not generate corresponding voucher!');
     http_response_code(500);
     die();
 }
