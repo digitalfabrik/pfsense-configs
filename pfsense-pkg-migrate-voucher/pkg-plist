@@ -1,12 +1,12 @@
 @dir /usr/local/pkg
 /usr/local/pkg/migrate-voucher.xml
 
-# @dir /etc/inc/priv
-# /etc/inc/priv/fauxapi.priv.inc
-#
-# @dir /etc/fauxapi
-# /etc/fauxapi/credentials.ini
-# /etc/fauxapi/pfsense_function_calls.txt
+@comment @dir /etc/inc/priv
+@comment /etc/inc/priv/fauxapi.priv.inc
+
+@comment @dir /etc/fauxapi
+@comment /etc/fauxapi/credentials.ini
+@comment /etc/fauxapi/pfsense_function_calls.txt
 
 @dir /usr/local/www/migrate-voucher
 /usr/local/www/migrate-voucher/migrate.php
@@ -14,12 +14,12 @@
 @dir /usr/local/www/migrate-voucher/admin
 /usr/local/www/migrate-voucher/admin/settings.php
 
-# @dir /etc/inc/fauxapi
-# /etc/inc/fauxapi/fauxapi.inc
-# /etc/inc/fauxapi/fauxapi_actions.inc
-# /etc/inc/fauxapi/fauxapi_auth.inc
-# /etc/inc/fauxapi/fauxapi_logger.inc
-# /etc/inc/fauxapi/fauxapi_pfsense_interface.inc
-# /etc/inc/fauxapi/fauxapi_utils.inc
+@comment @dir /etc/inc/fauxapi
+@comment /etc/inc/fauxapi/fauxapi.inc
+@comment /etc/inc/fauxapi/fauxapi_actions.inc
+@comment /etc/inc/fauxapi/fauxapi_auth.inc
+@comment /etc/inc/fauxapi/fauxapi_logger.inc
+@comment /etc/inc/fauxapi/fauxapi_pfsense_interface.inc
+@comment /etc/inc/fauxapi/fauxapi_utils.inc
 
 %%DATADIR%%/info.xml
