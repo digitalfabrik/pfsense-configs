@@ -22,7 +22,8 @@
 // echo json_encode($response);
 
 require_once('globals.inc');
-global $g;
+require_once("config.inc");
+global $g, $config;
 
 $from_cpzone = 'main';
 $to_cpzone = 'target';
@@ -43,8 +44,19 @@ if ($status == "OK") {
     printf(gettext('%1$s invalid: %2$s !!'), $voucher, $result);
 }
 
+$privkey = base64_decode($config['voucher'][$to_cpzone]['privatekey']);
+$fd = fopen("{$g['varetc_path']}/voucher_{$to_cpzone}.private", "w");
+if (!$fd) {
+    $input_errors[] = gettext("Cannot write private key file") . ".\n";
+} else {
+    chmod("{$g['varetc_path']}/voucher_{$to_cpzone}.private", 0600);
+    fwrite($fd, $privkey);
+    fclose($fd);
+}
+
 $amount = $nr + 1;
 $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$to_cpzone}.cfg -p {$g['varetc_path']}/voucher_{$to_cpzone}.private {$roll} {$amount}");
+@unlink("{$g['varetc_path']}/voucher_{$to_cpzone}.private");
 var_dump($result);
 echo("\n");
 echo(explode("\n", $result)[7]);
