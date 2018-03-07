@@ -36,5 +36,11 @@ if (!$target_voucher) {
     die();
 }
 
-var_dump($target_voucher);
-http_response_code(200);
+$new_POST = $_POST;
+$new_POST['auth_voucher'] = $target_voucher;
+
+$_SESSION['voucher_migrate_post'] = $new_POST;
+
+header("HTTP/1.1 301 Moved Permanently");
+header("Location: /migrate-voucher/alternative_login.php");
+die();
