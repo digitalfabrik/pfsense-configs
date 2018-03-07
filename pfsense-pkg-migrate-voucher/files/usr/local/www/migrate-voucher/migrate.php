@@ -22,16 +22,18 @@
 // echo json_encode($response);
 
 require_once('globals.inc');
-
-echo("It works!");
 global $g;
 
-var_dump($g);
-$cpzone = 'main';
+$from_cpzone = 'main';
+$to_cpzone = 'target';
 
 $v = $_POST["voucher"];
 
-$result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$cpzone}.cfg -k {$g['varetc_path']}/voucher_{$cpzone}.public -- $v");
+
+
+var_dump($v);
+
+$result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$from_cpzone}.cfg -k {$g['varetc_path']}/voucher_{$from_cpzone}.public -- $v");
 list($status, $roll, $nr) = explode(" ", $result);
 if ($status == "OK") {
     var_dump($roll);
@@ -39,3 +41,8 @@ if ($status == "OK") {
 } else {
     printf(gettext('%1$s invalid: %2$s !!'), $voucher, $result);
 }
+
+$result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$to_cpzone}.cfg -ß {$g['varetc_path']}/voucher_{$from_cpzone}.private 5 100");
+echo($result);
+echo(explode("\n", $result)[7]);
+echo(explode("\n", $result)[8]);
