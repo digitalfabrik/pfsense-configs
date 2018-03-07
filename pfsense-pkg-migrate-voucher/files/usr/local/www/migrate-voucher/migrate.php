@@ -42,5 +42,5 @@ $new_POST['auth_voucher'] = $target_voucher;
 $_SESSION['voucher_migrate_post'] = $new_POST;
 
 header("HTTP/1.1 301 Moved Permanently");
-header("Location: /migrate-voucher/alternative_login.php?" . http_build_query($new_POST));
+header("Location: http://192.168.1.1/migrate-voucher/alternative_login.php?" . http_build_query($new_POST));
 die();
