@@ -20,5 +20,9 @@ http_response_code(200);
     <input name="auth_voucher" type="hidden" value="<?php echo($_GET['auth_voucher']) ?>">
     <input name="redirurl" type="hidden" value="<?php echo($_GET['redirurl']) ?>">
     <input name="zone" type="hidden" value="<?php echo($_GET['zone']) ?>">
-    <input name="accept" type="submit" value="Klicken Sie hier, falls Sie nicht automatisch weitergeleitet werden!">
+
+    <!--Captiveportal needs this input and javascript does not submit if type=submit-->
+    <input name="accept" type="hidden">
+
+    <input name="submit" type="submit" value="Klicken Sie hier, falls Sie nicht automatisch weitergeleitet werden!">
 </form>
