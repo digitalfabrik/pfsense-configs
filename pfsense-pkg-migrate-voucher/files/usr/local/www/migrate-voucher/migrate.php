@@ -42,7 +42,10 @@ if ($status == "OK") {
     printf(gettext('%1$s invalid: %2$s !!'), $voucher, $result);
 }
 
-$result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$to_cpzone}.cfg -ß {$g['varetc_path']}/voucher_{$from_cpzone}.private 5 100");
+$amount = $nr + 1;
+$result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$to_cpzone}.cfg -p {$g['varetc_path']}/voucher_{$from_cpzone}.private {$roll} {$amount}");
 echo($result);
+echo('\n');
 echo(explode("\n", $result)[7]);
 echo(explode("\n", $result)[8]);
+echo(explode("\n", $result)[7 + $nr]);
