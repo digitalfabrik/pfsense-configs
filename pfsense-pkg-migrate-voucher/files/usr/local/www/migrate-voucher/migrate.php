@@ -23,39 +23,71 @@
 
 require_once('globals.inc');
 require_once("config.inc");
-global $g, $config;
 
-$from_cpzone = 'main';
-$to_cpzone = 'target';
+const FROM_CPZONE = 'main';
+const TO_CPZONE = 'target';
 
-$v = $_POST["voucher"];
+function decrypt_voucher($voucher, $zone)
+{
+    global $g;
 
+    $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$zone}.cfg -k {$g['varetc_path']}/voucher_{$zone}.public -- $voucher");
+    list($status, $roll, $nr) = explode(" ", $result);
+    if ($status == "OK") {
+        var_dump($roll);
+        var_dump($nr);
+    } else {
+        printf(gettext('%1$s invalid: %2$s !!'), $voucher, $result);
+        return NULL;
+    }
 
-
-var_dump($g);
-var_dump($v);
-
-$result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$from_cpzone}.cfg -k {$g['varetc_path']}/voucher_{$from_cpzone}.public -- $v");
-list($status, $roll, $nr) = explode(" ", $result);
-if ($status == "OK") {
-    var_dump($roll);
-    var_dump($nr);
-} else {
-    printf(gettext('%1$s invalid: %2$s !!'), $voucher, $result);
+    return array('roll' => $roll, 'nr' => $nr);
 }
 
-$privkey = base64_decode($config['voucher'][$to_cpzone]['privatekey']);
-$fd = fopen("{$g['varetc_path']}/voucher_{$to_cpzone}.private", "w");
-if (!$fd) {
-    $input_errors[] = gettext("Cannot write private key file") . ".\n";
-} else {
-    chmod("{$g['varetc_path']}/voucher_{$to_cpzone}.private", 0600);
-    fwrite($fd, $privkey);
-    fclose($fd);
+function generate_voucher($nr, $roll, $zone)
+{
+    global $g, $config;
+
+    $privkey = base64_decode($config['voucher'][$zone]['privatekey']);
+    $fd = fopen("{$g['varetc_path']}/voucher_{$zone}.private", "w");
+    if (!$fd) {
+        $input_errors[] = gettext("Cannot write private key file") . ".\n";
+        return NULL;
+    } else {
+        chmod("{$g['varetc_path']}/voucher_{$zone}.private", 0600);
+        fwrite($fd, $privkey);
+        fclose($fd);
+    }
+
+    $count = $nr;
+    $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$zone}.cfg -p {$g['varetc_path']}/voucher_{$zone}.private {$roll} {$count}");
+    @unlink("{$g['varetc_path']}/voucher_{$zone}.private");
+
+    // Exec returns the last line of the output. In our case this is the voucher we want.
+
+    return substr($result, 2, strlen($result - 3));
 }
 
-$amount = $nr + 1;
-$result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$to_cpzone}.cfg -p {$g['varetc_path']}/voucher_{$to_cpzone}.private {$roll} {$amount}");
-@unlink("{$g['varetc_path']}/voucher_{$to_cpzone}.private");
-var_dump($result);
-echo($result);
+$voucher = $_POST["voucher"];
+
+if (!$result) {
+    http_response_code(500);
+    die();
+}
+
+$result = decrypt_voucher($voucher, FROM_CPZONE);
+
+if (!$result) {
+    http_response_code(500);
+    die();
+}
+
+$target_voucher = generate_voucher($result['nr'], $result['roll'], TO_CPZONE);
+
+if (!$target_voucher) {
+    http_response_code(500);
+    die();
+}
+
+var_dump($target_voucher);
+http_response_code(200);
