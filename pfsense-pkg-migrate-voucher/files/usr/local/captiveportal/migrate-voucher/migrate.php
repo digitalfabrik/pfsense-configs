@@ -3,12 +3,14 @@
 namespace voucher_migrate;
 include_once('/etc/inc/voucher_migrate/voucher_migrate.inc');
 
+// todo: make these configurable
 const FROM_CPZONE = 'main';
 const TO_CPZONE = 'ottostrasse';
 
 function redirect($data) {
     header("HTTP/1.1 301 Moved Permanently");
     header("Location: /migrate-voucher/alternative_login.php?" . http_build_query($data));
+    die();
 }
 
 
@@ -25,12 +27,12 @@ if (!isset($_POST['auth_voucher'])) {
 }
 
 $voucher = $_POST["auth_voucher"];
+// todo: validate input
 $result = decrypt_voucher($voucher, FROM_CPZONE);
 
 if (!$result) {
     // Fallback to default decryption
     redirect($_POST);
-    die();
 }
 
 if (!$result) {
