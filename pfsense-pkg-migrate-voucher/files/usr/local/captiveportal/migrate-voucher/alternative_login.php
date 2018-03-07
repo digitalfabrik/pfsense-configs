@@ -10,11 +10,11 @@ http_response_code(200);
 
 <script type="text/javascript">
     window.onload = function () {
-        document.forms["proxy-form"].submit();
+        document.proxyForm.submit();
     }
 </script>
 
-<form name='proxy-form' method="post" action="<?php echo($_GET['action']) ?>">
+<form name='proxyForm' method="post" action="<?php echo($_GET['action']) ?>">
     <input name="auth_user" type="hidden" value="<?php echo($_GET['auth_user']) ?>">
     <input name="auth_pass" type="hidden" value="<?php echo($_GET['auth_pass']) ?>">
     <input name="auth_voucher" type="hidden" value="<?php echo($_GET['auth_voucher']) ?>">
