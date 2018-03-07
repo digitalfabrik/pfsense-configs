@@ -22,7 +22,7 @@ http_response_code(200);
     <input name="zone" type="hidden" value="<?php echo($_GET['zone']) ?>">
 
     <!--Captiveportal needs this input and javascript does not submit if type=submit-->
-    <input name="accept" type="hidden">
+    <input name="accept" type="hidden" value="dummy">
 
     <input name="doYourThing" type="submit" value="Klicken Sie hier, falls Sie nicht automatisch weitergeleitet werden!">
 </form>
