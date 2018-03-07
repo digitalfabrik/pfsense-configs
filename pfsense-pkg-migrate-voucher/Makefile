@@ -27,12 +27,12 @@ do-install:
 	${INSTALL_DATA} -m 0644 ${FILESDIR}${PREFIX}/pkg/migrate-voucher.xml \
 		${STAGEDIR}${PREFIX}/pkg
 
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/migrate-voucher
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/migrate-voucher/
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/migrate-voucher/migrate.php \
-		${STAGEDIR}${PREFIX}/www/migrate-voucher/
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/migrate-voucher/alternative_login.php \
-		${STAGEDIR}${PREFIX}/www/migrate-voucher/
+	${MKDIR} ${STAGEDIR}${PREFIX}/captiveportal/migrate-voucher
+	${MKDIR} ${STAGEDIR}${PREFIX}/captiveportal/migrate-voucher/
+	${INSTALL_DATA} ${FILESDIR}${PREFIX}/captiveportal/migrate-voucher/migrate.php \
+		${STAGEDIR}${PREFIX}/captiveportal/migrate-voucher/
+	${INSTALL_DATA} ${FILESDIR}${PREFIX}/captiveportal/migrate-voucher/alternative_login.php \
+		${STAGEDIR}${PREFIX}/captiveportal/migrate-voucher/
 
 	${MKDIR} ${STAGEDIR}/etc/inc/voucher_migrate
 	${INSTALL_DATA} ${FILESDIR}/etc/inc/voucher_migrate/voucher_migrate.inc \
