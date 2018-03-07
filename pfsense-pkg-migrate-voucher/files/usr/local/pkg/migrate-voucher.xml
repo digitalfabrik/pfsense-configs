@@ -19,7 +19,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <menu>
         <name>migrate-voucher</name>
         <tooltiptext>A interface to migrate from one voucher key pair to another.</tooltiptext>
-        <section>System</section>
+        <section>Services</section>
         <url>/migrate-voucher/admin/settings.php</url>
     </menu>
     <tabs>

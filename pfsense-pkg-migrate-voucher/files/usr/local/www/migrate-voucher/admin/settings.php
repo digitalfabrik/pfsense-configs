@@ -1,5 +1,5 @@
 <?php
-include_once('util.inc');
+# include_once('util.inc');
 include_once('guiconfig.inc');
 #
 #$fauxapi_credentials_ini_file = '/etc/fauxapi/credentials.ini';
@@ -68,7 +68,7 @@ include_once('head.inc');
         </div>
     </div>
 --->
-echo("It works!")
 <?php
+echo("It works!");
 include('foot.inc');
 ?>
