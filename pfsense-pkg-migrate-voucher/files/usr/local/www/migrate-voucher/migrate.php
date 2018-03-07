@@ -62,7 +62,7 @@ function generate_voucher($nr, $roll, $zone)
 
     // Exec returns the last line of the output. In our case this is the voucher we want.
 
-    return substr($result, 2, strlen($result - 3));
+    return substr($result, 2, strlen($result) - 3);
 }
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
