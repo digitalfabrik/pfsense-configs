@@ -58,7 +58,4 @@ $amount = $nr + 1;
 $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$to_cpzone}.cfg -p {$g['varetc_path']}/voucher_{$to_cpzone}.private {$roll} {$amount}");
 @unlink("{$g['varetc_path']}/voucher_{$to_cpzone}.private");
 var_dump($result);
-echo("\n");
-echo(explode("\n", $result)[7]);
-echo(explode("\n", $result)[8]);
-echo(explode("\n", $result)[7 + $nr]);
+echo($result);
