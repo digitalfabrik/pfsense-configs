@@ -21,6 +21,8 @@
 // unset($response->http_code);
 // echo json_encode($response);
 
+require_once('globals.inc');
+
 echo("It works!");
 global $g, $cpzone;
 
