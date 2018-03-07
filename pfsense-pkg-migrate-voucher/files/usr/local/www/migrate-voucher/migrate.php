@@ -24,10 +24,10 @@
 require_once('globals.inc');
 
 echo("It works!");
-global $g, $cpzone;
+global $g;
 
 var_dump($g);
-var_dump($cpzone);
+$cpzone = 'main';
 
 $v = $_POST["voucher"];
 
