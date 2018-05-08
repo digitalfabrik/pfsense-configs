@@ -1,15 +1,59 @@
 <?php
 
 namespace voucher_migrate;
-include_once('/etc/inc/voucher_migrate/voucher_migrate.inc');
+
+require_once('phpsessionmanager.inc');
+require_once('globals.inc');
+require_once("config.inc");
+require_once("voucher.inc");
+require_once("captiveportal.inc");
+
+function decrypt_voucher($voucher, $zone)
+{
+    global $g;
+
+    $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$zone}.cfg -k {$g['varetc_path']}/voucher_{$zone}.public -- $voucher");
+    list($status, $roll, $nr) = explode(" ", $result);
+    if ($status != "OK") {
+        return NULL;
+    }
+
+    return array('roll' => $roll, 'nr' => $nr);
+}
+
+function generate_voucher($nr, $roll, $zone)
+{
+    global $g, $config;
+
+    $privkey = base64_decode($config['voucher'][$zone]['privatekey']);
+    $fd = fopen("{$g['varetc_path']}/voucher_{$zone}.private", "w");
+    if (!$fd) {
+        $input_errors[] = gettext("Cannot write private key file") . ".\n";
+        return NULL;
+    } else {
+        chmod("{$g['varetc_path']}/voucher_{$zone}.private", 0600);
+        fwrite($fd, $privkey);
+        fclose($fd);
+    }
+
+    $count = $nr;
+    $result = exec("/usr/local/bin/voucher -c {$g['varetc_path']}/voucher_{$zone}.cfg -p {$g['varetc_path']}/voucher_{$zone}.private {$roll} {$count}");
+    @unlink("{$g['varetc_path']}/voucher_{$zone}.private");
+
+    // Exec returns the last line of the output. In our case this is the voucher we want.
+
+    return substr($result, 2, strlen($result) - 3);
+}
+
 
 // todo: make these configurable
 const FROM_CPZONE = 'main';
-const TO_CPZONE = 'ottostrasse';
+const TO_CPZONE = 'tatdf';
+const TARGET_ROLL_OFFSET = 10;
 
 function redirect($data) {
     header("HTTP/1.1 301 Moved Permanently");
-    header("Location: /migrate-voucher/alternative_login.php?" . http_build_query($data));
+    header("Location: /captiveportal-alternative_login.php?" . http_build_query($data));
     die();
 }
 
@@ -41,7 +85,16 @@ if (!$result) {
     die();
 }
 
-$target_voucher = generate_voucher($result['nr'], $result['roll'], TO_CPZONE);
+global $cpzone;
+$cpzone = FROM_CPZONE;
+
+if (voucher_auth($voucher, 1)[1] == 'Access denied!') {
+    echo('Voucher invalid!');
+    http_response_code(500);
+    die();
+}
+
+$target_voucher = generate_voucher($result['nr'], $result['roll'] + TARGET_ROLL_OFFSET, TO_CPZONE);
 
 if (!$target_voucher) {
     echo('Could not generate corresponding voucher!');
