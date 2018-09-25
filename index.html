@@ -1,45 +1,134 @@
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-        <title>Material Design Lite</title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description"
+        content="Captive Portal Login">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Tür an Tür Digital Factory - Captive Portal</title>
 
 
-        <link rel="stylesheet" href="material.css">
-        <style>
-.mdl-layout {
-    align-items: center;
-    justify-content: center;
-}
-.mdl-layout__content {
-    padding: 24px;
-    flex: none;
-}
-        </style>
-    </head>
-    <body>
-        <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
-            <main class="mdl-layout__content">
-                <div class="mdl-card mdl-shadow--6dp">
-                    <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-                        <h2 class="mdl-card__title-text">Tür an Tür - Digital Fabrik - WIFI</h2>
-                    </div>
-                    <div class="mdl-card__supporting-text">
-                        <form action="#">
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input class="mdl-textfield__input" type="text" id="voucher_code" />
-                                <label class="mdl-textfield__label" for="voucher_code">Voucher Code</label>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                        <button class="mdl-button mdl-button--colored mdl-js-button
-                        mdl-js-ripple-effect">Anmelden</button>
-                    </div>
-                </div>
-            </main>
+  <link rel="stylesheet" href="material.min.css">
+  <script src="material.min.js"></script>
+  <style>
+    .mdl-card {
+      min-width: 150px;
+    }
+
+    .mdl-layout {
+      position: relative;;
+    }
+
+    .mdl-layout__content {
+      padding: 24px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .logo {
+      width: 100%
+    }
+
+    .notice {
+      text-align: justify;
+      padding: 10px;
+    }
+
+    form {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-color--grey-100">
+  <main class="mdl-layout__content">
+    <div class="mdl-card mdl-shadow--6dp">
+      <div class="mdl-card__title mdl-color-text--white">
+        <img class="logo" src="./TaT_DF_LOGO.png">
+      </div>
+
+      <form method="post" action="$PORTAL_ACTION$">
+        <input name="redirurl" type="hidden" value="$PORTAL_REDIRURL$">
+        <input name="zone" type="hidden" value="$PORTAL_ZONE$">
+
+
+        <div class="mdl-card__supporting-text">
+          <span style="color:red; font-weight: bold;">$PORTAL_MESSAGE$</span>
+
+
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="auth_voucher"/>
+            <label class="mdl-textfield__label" for="auth_voucher">Voucher Code</label>
+          </div>
+
+          <div class="notice">
+            <p>
+              Indem Sie auf Anmelden klicken stimmen Sie dem Haftungsauschluss zu.
+            </p>
+            <details>
+              <summary>Haftungsauschluss</summary>
+              <p>
+                Mit dem Erhalt der Zugangsdaten können Sie den Internetanschluss nutzen. Bitte
+                beachten
+                Sie dass
+                der Internetanschluss Ihnen von Dritten zur Verfügung gestellt wird.
+                Sie verpflichten sich nachfolgende Regeln zu beachten:
+                Es ist Ihnen nicht erlaubt die Zugangsdaten weiterzugeben. Die Nutzung des
+                Anschlusses
+                ist
+                nur
+                durch Sie persönlich gestattet!
+                Sie unterliegen den gesetzlichen Bestimmungen zur Internetnutzung in Deutschland.
+                Insbesondere ist folgendes nicht erlaubt:
+              <ul>
+                <li>Der Aufruf zu Straftaten über das Internet</li>
+                <li>Die Organisation von Straftaten über das Internet</li>
+                <li>Das unberechtigte Herunterladen und/oder weitergeben von urheberrechtlich
+                  geschützten
+                  Werken
+                </li>
+                <li>Das Veröffentlichen von diffamierenden, beleidigenden oder hetzerischen Inhalten
+                </li>
+                <li>Das Verbreiten von Computerviren oder Schad‐Software</li>
+                <li>Das Verbreiten von Computerviren oder Schad‐Software</li>
+              </ul>
+              Darüber hinaus gelten die gesetzlichen Bestimmungen.
+              </p>
+            </details>
+          </div>
         </div>
-    </body>
+
+
+        <div class="mdl-card__actions mdl-card--border">
+          <input class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                 name="accept"
+                 type="submit"
+                 value="Anmelden">
+        </div>
+      </form>
+
+      <div class="mdl-card__actions mdl-card--border mdl-card__supporting-text">
+        <p>
+          Verkauf im:<br>
+          Cafe Tür an Tür<br>
+          Wertachstraße 29, 86153 Augsburg<br>
+
+
+        </p>
+
+        <p>
+          1 Voucher = 36 Tage = 5€
+        </p>
+      </div>
+      <div class="mdl-card__actions mdl-card--border mdl-card__supporting-text">
+        <div style="text-align: center; font-weight: bold;">Bei Problemen mit dem WLAN:
+          wifi@tuerantuer.de
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
 </html>
