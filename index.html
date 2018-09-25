@@ -8,8 +8,8 @@
   <title>Tür an Tür Digital Factory - Captive Portal</title>
 
 
-  <link rel="stylesheet" href="material.min.css">
-  <script src="material.min.js"></script>
+  <link rel="stylesheet" href="captiveportal-material.min.css">
+  <script src="captiveportal-material.min.js"></script>
   <style>
     .mdl-card {
       min-width: 150px;
@@ -46,7 +46,7 @@
   <main class="mdl-layout__content">
     <div class="mdl-card mdl-shadow--6dp">
       <div class="mdl-card__title mdl-color-text--white">
-        <img class="logo" src="./TaT_DF_LOGO.png">
+        <img class="logo" src="captiveportal-TaT_DF_LOGO.png">
       </div>
 
       <form method="post" action="$PORTAL_ACTION$">
@@ -59,8 +59,8 @@
 
 
           <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" type="text" id="auth_voucher"/>
-            <label class="mdl-textfield__label" for="auth_voucher">Voucher Code</label>
+            <input name="auth_voucher" class="mdl-textfield__input" type="text" id="voucher_code"/>
+            <label class="mdl-textfield__label" for="voucher_code">Voucher Code</label>
           </div>
 
           <div class="notice">
