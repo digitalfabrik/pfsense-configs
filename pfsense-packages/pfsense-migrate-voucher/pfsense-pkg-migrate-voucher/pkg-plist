@@ -1,0 +1,11 @@
+@dir /usr/local/pkg
+/usr/local/pkg/migrate-voucher.xml
+
+@dir /usr/local/captiveportal/migrate-voucher
+/usr/local/captiveportal/migrate-voucher/migrate.php
+/usr/local/captiveportal/migrate-voucher/alternative_login.php
+
+@dir /etc/inc/voucher_migrate
+/etc/inc/voucher_migrate/voucher_migrate.inc
+
+%%DATADIR%%/info.xml

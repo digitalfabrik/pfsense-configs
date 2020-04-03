@@ -1,0 +1,11 @@
+<div>Message: $PORTAL_MESSAGE$</div>
+
+<form method="post" action="/migrate-voucher/migrate.php">
+    <label>Voucher:</label>
+    <input name="auth_voucher" type="text">
+    <input name="redirurl" type="hidden" value="$PORTAL_REDIRURL$">
+    <input name="zone" type="hidden" value="$PORTAL_ZONE$">
+    <input name="accept" type="submit" value="Continue">
+
+    <input name="action" type="hidden" value="$PORTAL_ACTION$">
+</form>

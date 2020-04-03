@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<pfsensepkgs>
+    <package>
+        <name>migrate-voucher</name>
+        <internal_name>migrate-voucher</internal_name>
+        <descr><![CDATA[A interface to migrate from one voucher key pair to another.]]></descr>
+        <website>https://github.com/integreat/pfsense-migrate-voucher</website>
+        <category>System</category>
+        <version>%%PKGVERSION%%</version>
+        <status>beta</status>
+        <required_version>2.4.2</required_version>
+        <configurationfile>migrate-voucher.xml</configurationfile>
+        <maintainer>ammann@integreat-app.de</maintainer>
+    </package>
+</pfsensepkgs>
